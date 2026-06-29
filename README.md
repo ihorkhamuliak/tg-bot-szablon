@@ -1,51 +1,53 @@
-# Telegram-бот для малого бізнесу (n8n) — шаблон
+**English** | [Українська](README_UA.md)
 
-Готове рішення-конструктор: Telegram-бот, що **відповідає клієнтам, веде запис на послуги й шле нагадування** — налаштовується під новий бізнес за один вечір, без переписування логіки.
+# Telegram bot for small business (n8n) — template
 
-> ℹ️ Це портфоліо-опис продукту. Сам воркфлоу (n8n JSON) — закрита частина. Хочеш впровадити собі — напиши.
+A ready-made building block: a Telegram bot that **answers customers, books appointments, and sends reminders** — configurable for a new business in one evening, with no logic rewriting.
 
-## Що вміє
+> ℹ️ This is a portfolio description of the product. The workflow itself (n8n JSON) is a closed part. Want it for your business — get in touch.
 
-- 💬 **Відповідає на питання (FAQ)** українською, з пам'яттю розмови — клієнт не повторюється.
-- 📝 **Веде запис на послугу:** збирає ім'я → послугу/майстер-клас → дату й час → телефон, і зберігає в таблицю.
-- ⏰ **Нагадування** за 24 год і 2 год до візиту — автоматично.
-- 🔔 **Сповіщає власника** про кожен новий запис.
-- 🙋 **Ескалація:** на скаргу чи нетипове прохання бот ввічливо реагує і передає власнику.
-- 🛡️ **Валідація:** перевіряє телефон, не дублює записи на одного клієнта.
+## What it does
 
-## Під кого
+- 💬 **Answers questions (FAQ)** with conversation memory — the customer never repeats themselves.
+- 📝 **Books appointments:** collects name → service/class → date & time → phone, and saves to a sheet.
+- ⏰ **Reminders** 24h and 2h before the visit — automatically.
+- 🔔 **Notifies the owner** about every new booking.
+- 🙋 **Escalation:** on a complaint or unusual request the bot replies politely and hands off to the owner.
+- 🛡️ **Validation:** checks the phone number, no duplicate bookings per customer.
 
-Студії, майстер-класи, салони, послуги за записом — будь-який малий бізнес, де клієнти пишуть у Telegram і треба їх записувати.
+## Who it's for
 
-## Технології
+Studios, workshops, salons, any appointment-based small business where customers write on Telegram and need to be booked.
 
-- **n8n** (Cloud або self-hosted) — оркестрація
-- **Claude API** — діалог і розуміння клієнта
-- **Google Sheets** — записи й історія розмов
-- **Telegram Bot API** — канал спілкування
+## Tech stack
 
-## Як це працює (схема)
+- **n8n** (Cloud or self-hosted) — orchestration
+- **Claude API** — dialogue and customer understanding
+- **Google Sheets** — bookings and conversation history
+- **Telegram Bot API** — communication channel
+
+## How it works
 
 ```
-Клієнт у Telegram
+Customer on Telegram
       │
       ▼
-   n8n workflow ── Claude (діалог) ── Google Sheets (запис + пам'ять)
+   n8n workflow ── Claude (dialogue) ── Google Sheets (booking + memory)
       │
-      ├─ підтвердження клієнту
-      ├─ сповіщення власнику
-      └─ нагадування 24h / 2h
+      ├─ confirmation to the customer
+      ├─ notification to the owner
+      └─ reminders 24h / 2h
 ```
 
-## Налаштування під клієнта
+## Configuring for a client
 
-Одна нода `CONFIG` — серце шаблону. Міняєш лише: назву бізнесу, місто, перелік послуг, ціни, FAQ (адреса, години, паркування). Решта логіки — без змін.
+A single `CONFIG` node is the heart of the template. You only change: business name, city, list of services, prices, FAQ (address, hours, parking). The rest of the logic stays untouched.
 
-## Впровадження
+## Get it implemented
 
-Налаштування під новий бізнес, навчання, підтримка — пиши:
-**Telegram:** [@Ihor_0O ](https://t.me/) · **Email:** hamulakigor7@gmail.com
+Setup for a new business, training, support — get in touch:
+**Telegram:** [@Ihor_0O](https://t.me/Ihor_0O) · **Email:** hamulakigor7@gmail.com
 
 ---
 
-© 2026 Ihor Khamuliak. Усі права захищені. Код воркфлоу не входить у цей репозиторій.
+© 2026 Ihor Khamuliak. All rights reserved. The workflow code is not included in this repository.
