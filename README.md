@@ -44,7 +44,7 @@
 ## Впровадження
 
 Налаштування під новий бізнес, навчання, підтримка — пиши:
-**Telegram:** [@your_username](https://t.me/) · **Email:** hamulakigor7@gmail.com
+**Telegram:** [@Ihor_0O ](https://t.me/) · **Email:** hamulakigor7@gmail.com
 
 ---
 
