@@ -4,7 +4,7 @@
 
 A ready-made building block: a Telegram bot that **answers customers, books appointments, and sends reminders** — configurable for a new business in one evening, with no logic rewriting.
 
-> ℹ️ This is a portfolio description of the product. The workflow itself (n8n JSON) is a closed part. Want it for your business — get in touch.
+> 📦 Included: the ready-to-import workflow [n8n_workflow.json](n8n_workflow.json) + a step-by-step setup guide [SETUP.md](SETUP.md) (UA). Import into n8n, fill in the CONFIG node — done.
 
 ## What it does
 
@@ -41,7 +41,7 @@ Customer on Telegram
 
 ## Configuring for a client
 
-A single `CONFIG` node is the heart of the template. You only change: business name, city, list of services, prices, FAQ (address, hours, parking). The rest of the logic stays untouched.
+A single `CONFIG` node is the heart of the template. You only change: business name, city, list of services, prices, FAQ (address, hours, parking). The rest of the logic stays untouched. Full guide: [SETUP.md](SETUP.md).
 
 ## Get it implemented
 
@@ -50,4 +50,4 @@ Setup for a new business, training, support — get in touch:
 
 ---
 
-© 2026 Ihor Khamuliak. All rights reserved. The workflow code is not included in this repository.
+© 2026 Ihor Khamuliak.

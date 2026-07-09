@@ -1,0 +1,1201 @@
+{
+  "name": "n8n_Szablon_TGv4",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "id": "7def4582-8588-413a-a396-a97356b94f30",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1408,
+        112
+      ],
+      "webhookId": "zereno-telegram-wh-001",
+      "credentials": {
+        "telegramApi": {
+          "id": "cKtPVX3YqcCo4wgn",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: \"claude-sonnet-4-5\", max_tokens: 1024, temperature: 0.3, system: $('CONFIG').item.json.cfg.system_main, messages: $('Prepare History').item.json.history }) }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "f93437d9-8a6d-4da8-b225-d3b8efc4073b",
+      "name": "Claude: Extract Booking",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -432,
+        112
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "vOPqW57wNKIPnrde",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "0c4153f6-6601-47af-9139-5a9cb4ab5858",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "complete",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "54b26d25-9cc5-4508-944d-c81b3c7dee4f",
+      "name": "IF: Is Valid JSON",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -192,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $('Parse Response').item.json.reply_text || '...' }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "3cb80021-c6b0-4759-a600-43ca0012a903",
+      "name": "Send Booking Question",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        48,
+        224
+      ],
+      "webhookId": "f3d9aa11-f6ad-4a0f-a1ea-767cfcb0d53f",
+      "credentials": {
+        "telegramApi": {
+          "id": "cKtPVX3YqcCo4wgn",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "16QGn2tD92xrhEPjSTfgdVWjF53oMXLZ9o0TdMuKDaX4",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "n8n_test",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $now.toMillis() }}",
+            "Chat_ID": "={{ String($('Telegram Trigger').item.json.message.chat.id) }}",
+            "name": "={{ $('Parse Response').item.json.name }}",
+            "people_count": "={{ $('Parse Response').item.json.people_count }}",
+            "guests": "={{ $('Parse Response').item.json.guests }}",
+            "workshop": "={{ $('Parse Response').item.json.workshop }}",
+            "date": "={{ String($('Parse Response').item.json.date) }}",
+            "phone": "={{ String($('Parse Response').item.json.phone) }}",
+            "reminder_24h": "FALSE",
+            "reminder_2h": "FALSE"
+          },
+          "matchingColumns": [
+            "Chat_ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Chat_ID",
+              "displayName": "Chat_ID",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "people_count",
+              "displayName": "people_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "guests",
+              "displayName": "guests",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "workshop",
+              "displayName": "workshop",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reminder_24h",
+              "displayName": "reminder_24h",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reminder_2h",
+              "displayName": "reminder_2h",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "cellFormat": "RAW"
+        }
+      },
+      "id": "4a42b453-4ec6-4094-85ea-c79ea46d2088",
+      "name": "Google Sheets: Save Booking",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "position": [
+        48,
+        -16
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sXfdj3vqHgDwpH3G",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ (() => { const b = $('Parse Response').item.json; const guests = (b.people_count > 1 && b.guests) ? ('\\n👥 Учасники: ' + b.guests) : ''; return '✅ Бронювання підтверджено!\\n' + '\\n👤 Імʼя: ' + b.name + '\\n🔢 Осіб: ' + b.people_count + guests + '\\n🎨 Майстер-клас: ' + b.workshop + '\\n📅 Дата: ' + (b.date_human || b.date) + '\\n📞 Телефон: ' + b.phone; })() }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "773b5d27-939c-4a12-9f6d-2ae2442dd1de",
+      "name": "Telegram: Confirm to Client",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        304,
+        -112
+      ],
+      "webhookId": "91b68647-b071-4422-b2ac-50762966c72b",
+      "credentials": {
+        "telegramApi": {
+          "id": "cKtPVX3YqcCo4wgn",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('CONFIG').item.json.cfg.owner_chat_id }}",
+        "text": "={{ (() => { const b = $('Parse Response').item.json; const guests = (b.people_count > 1 && b.guests) ? ('\\n👥 Учасники: ' + b.guests) : ''; return '🔔 НОВА ЗАЯВКА\\n' + '\\n👤 Імʼя: ' + b.name + '\\n🔢 Осіб: ' + b.people_count + guests + '\\n🎨 Майстер-клас: ' + b.workshop + '\\n📅 Дата: ' + (b.date_human || b.date) + '\\n📞 Телефон: ' + b.phone; })() }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "90ad2bb4-bc6f-4324-be4f-7d577da18c76",
+      "name": "Telegram: Notify Owner",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        304,
+        48
+      ],
+      "webhookId": "9319a115-370d-40aa-9d6a-555d23b5f8a9",
+      "credentials": {
+        "telegramApi": {
+          "id": "cKtPVX3YqcCo4wgn",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 2
+            }
+          ]
+        }
+      },
+      "id": "9e6f329d-7071-4ead-abfb-ffa4223a16a4",
+      "name": "Schedule Trigger: Every 15 Min",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1328,
+        512
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "16QGn2tD92xrhEPjSTfgdVWjF53oMXLZ9o0TdMuKDaX4",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "n8n_test",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "78e33995-8b43-4e80-8ee6-f04ed02aa0aa",
+      "name": "Google Sheets: Read Bookings",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "position": [
+        -1088,
+        512
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sXfdj3vqHgDwpH3G",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "check-24h-window",
+              "leftValue": "={{ (() => { try { if (String($json.reminder_24h).toUpperCase() === 'TRUE') return false; const bd = DateTime.fromFormat(String($json.date).trim(), 'yyyy-MM-dd HH:mm', { zone: 'Europe/Warsaw' }); if (!bd.isValid) return false; const now = DateTime.now().setZone('Europe/Warsaw'); const diffH = bd.diff(now, 'hours').hours; return diffH > 0 && diffH <= 24; } catch(e) { return false; } })() }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1c6d9c58-c9c8-40dc-a301-c2a726a887d4",
+      "name": "IF: 24h Reminder Due",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -848,
+        432
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.Chat_ID }}",
+        "text": "={{ \"🔔 Нагадування! Завтра о \" + $json.date.split(' ')[1] + \" — майстер-клас \" + $json.workshop + \" в Назва Студії. Чекаємо! 🎨\" }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "6f5da1df-eca2-453b-abe9-a689ab88dffb",
+      "name": "Telegram: Send 24h Reminder",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -608,
+        384
+      ],
+      "webhookId": "ed3099bd-af28-484e-9e20-8bcbddb5da08",
+      "credentials": {
+        "telegramApi": {
+          "id": "cKtPVX3YqcCo4wgn",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "16QGn2tD92xrhEPjSTfgdVWjF53oMXLZ9o0TdMuKDaX4",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "n8n_test",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "reminder_24h": "TRUE",
+            "row_number": 0,
+            "ID": "={{ $('Google Sheets: Read Bookings').item.json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Chat_ID",
+              "displayName": "Chat_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "workshop",
+              "displayName": "workshop",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reminder_24h",
+              "displayName": "reminder_24h",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reminder_2h",
+              "displayName": "reminder_2h",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "37089f3a-9d8f-45a7-aa0c-37bdddf74e81",
+      "name": "Google Sheets: Update 24h Flag",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "position": [
+        -368,
+        384
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sXfdj3vqHgDwpH3G",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "check-2h-window",
+              "leftValue": "={{ (() => { try { if (String($json.reminder_2h).toUpperCase() === 'TRUE') return false; const bd = DateTime.fromFormat(String($json.date).trim(), 'yyyy-MM-dd HH:mm', { zone: 'Europe/Warsaw' }); if (!bd.isValid) return false; const now = DateTime.now().setZone('Europe/Warsaw'); const diffH = bd.diff(now, 'hours').hours; return diffH > 0 && diffH <= 2; } catch(e) { return false; } })() }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "418b409e-9a1c-40b6-bd94-755775204acf",
+      "name": "IF: 2h Reminder Due",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -848,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.Chat_ID }}",
+        "text": "={{ \"⏰ Сьогодні о \" + $json.date.split(' ')[1] + \" — ваш майстер-клас \" + $json.workshop + \" в Назва Студії. До зустрічі! 🎨\" }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "9380c578-2b6d-4850-83b2-b84ec6131659",
+      "name": "Telegram: Send 2h Reminder",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -608,
+        608
+      ],
+      "webhookId": "62a9a9e5-34b6-450b-89e6-cbb8422900c5",
+      "credentials": {
+        "telegramApi": {
+          "id": "cKtPVX3YqcCo4wgn",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "16QGn2tD92xrhEPjSTfgdVWjF53oMXLZ9o0TdMuKDaX4",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "n8n_test",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "reminder_2h": "TRUE",
+            "row_number": 0,
+            "ID": "={{ $('Google Sheets: Read Bookings').item.json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Chat_ID",
+              "displayName": "Chat_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "workshop",
+              "displayName": "workshop",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reminder_24h",
+              "displayName": "reminder_24h",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reminder_2h",
+              "displayName": "reminder_2h",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "ee3998bc-3a59-4b8d-80f8-c5671b32ba34",
+      "name": "Google Sheets: Update 2h Flag",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "position": [
+        -368,
+        608
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sXfdj3vqHgDwpH3G",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "16QGn2tD92xrhEPjSTfgdVWjF53oMXLZ9o0TdMuKDaX4",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "conversations",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "chat_id",
+              "lookupValue": "={{ $('Telegram Trigger').item.json.message.chat.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1120,
+        112
+      ],
+      "id": "6804f8a1-6a92-4f15-90eb-ea19e97e2801",
+      "name": "Read Conversation History",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sXfdj3vqHgDwpH3G",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const chatId = $('Telegram Trigger').item.json.message.chat.id;\nconst userMessage = $('Telegram Trigger').item.json.message.text;\nconst rows = $('Read Conversation History').all();\nlet history = [];\n\nif (rows.length > 0 && rows[0].json.history) {\n  try {\n    const raw = rows[0].json.history.toString().trim();\n    if (raw) {\n      const decoded = Buffer.from(raw, 'base64').toString('utf-8');\n      history = JSON.parse(decoded);\n      if (!Array.isArray(history)) history = [];\n    }\n  } catch (e) {\n    history = [];\n  }\n}\n\nhistory.push({ role: 'user', content: userMessage });\nif (history.length > 20) history = history.slice(-20);\n\n// перший елемент завжди user\nwhile (history.length > 0 && history[0].role !== 'user') history.shift();\n\nreturn [{\n  json: {\n    chat_id: String(chatId),\n    history: history,\n    user_message: userMessage,\n    has_history: rows.length > 0 && !!rows[0].json.history\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -912,
+        112
+      ],
+      "id": "8c51ce95-cd5b-48d1-8a2a-ed56273ee320",
+      "name": "Prepare History"
+    },
+    {
+      "parameters": {
+        "jsCode": "const chatId = $('Telegram Trigger').item.json.message.chat.id;\nconst assistantResponse = $('Parse Response').item.json.reply_text;\nlet history = $('Prepare History').item.json.history;\n\nhistory.push({ role: 'assistant', content: assistantResponse });\nif (history.length > 20) history = history.slice(-20);\n\nconst encoded = Buffer.from(JSON.stringify(history), 'utf-8').toString('base64');\n\nreturn [{\n  json: {\n    chat_id: String(chatId),\n    history: encoded,\n    updated_at: new Date().toISOString()\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        256,
+        224
+      ],
+      "id": "937b99f9-2829-4300-87fc-b3cc638275e3",
+      "name": "Save Booking History"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "16QGn2tD92xrhEPjSTfgdVWjF53oMXLZ9o0TdMuKDaX4",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "conversations",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "chat_id": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+            "history": "={{ $('Save Booking History').item.json.history }}"
+          },
+          "matchingColumns": [
+            "chat_id"
+          ],
+          "schema": [
+            {
+              "id": "chat_id",
+              "displayName": "chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "history",
+              "displayName": "history",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "cellFormat": "RAW"
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        464,
+        224
+      ],
+      "id": "9a096c02-c687-4a3a-8cce-fc2d6e0d22e4",
+      "name": "Update Booking History",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sXfdj3vqHgDwpH3G",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n//  CONFIG — ЄДИНЕ МІСЦЕ ДЛЯ ДАНИХ КЛІЄНТА\n//  Щоб налаштувати під новий бізнес — редагуй лише цей блок.\n// ============================================================\nconst cfg = {\n  business_name: 'Назва Студії',\n  city: 'Твоє місто',\n  currency: 'zł',\n  owner_chat_id: '@your_username',\n  workshops: 'Ручне ліплення з глини; Гончарний круг; Флористика (букети); Розпис кераміки',\n  prices: 'Ручне ліплення — 120 zł, Гончарний круг — 150 zł, Флористика — 140 zł, Розпис — 100 zł',\n  faq_info: 'Працюємо щодня 10:00–20:00. Є Wi-Fi та паркування поруч. Тривалість майстер-класу ~2 години. Адреса: вкажіть тут.',\n};\n\n// --- НИЖЧЕ НЕ РЕДАГУВАТИ ---\nconst nowW = DateTime.now().setZone('Europe/Warsaw').setLocale('uk');\ncfg.now_warsaw = nowW.toFormat('yyyy-MM-dd HH:mm') + ' (' + nowW.toFormat('cccc') + ')';\n\ncfg.system_main = `Ти доброзичливий AI-асистент студії \"${cfg.business_name}\" (${cfg.city}). Спілкуйся українською, тепло, коротко й по-людськи. Памʼятай попередні повідомлення з історії розмови.\n\nІНФО ПРО СТУДІЮ: ${cfg.faq_info}\nМАЙСТЕР-КЛАСИ: ${cfg.workshops}\nЦІНИ: ${cfg.prices}\nСЬОГОДНІ: ${cfg.now_warsaw}. Часовий пояс Europe/Warsaw.\n\nТВОЇ ЗАДАЧІ:\n1. Відповідати на питання про студію, ціни, розклад (бери лише з інфо вище, не вигадуй).\n2. Допомагати записатися на майстер-клас.\n\nЯК ВЕСТИ ЗАПИС — збери ці поля, питаючи по одному за раз:\n- імʼя контактної особи\n- кількість осіб (скільки людей прийде)\n- якщо осіб більше однієї — імена всіх учасників\n- який майстер-клас\n- дата й час\n- номер телефону\n\nПРАВИЛА:\n- Телефон: приймай у будь-якому форматі (з +48, з пробілами, з дефісами або просто цифри). Не прискіпуйся до формату.\n- Дату й час перетвори в абсолютний формат відносно \"СЬОГОДНІ\" (напр. \"завтра о 16:00\" → конкретна дата).\n- Якщо осіб 1 — поле guests дублює імʼя контакта.\n\nНАДЗВИЧАЙНО ВАЖЛИВО: коли всі поля зібрані, ти МУСИШ повернути ТІЛЬКИ JSON-обʼєкт і НІЧОГО більше. НЕ пиши підтвердження словами — це зробить система автоматично. КОЛИ ВСІ ПОЛЯ ЗІБРАНІ Й КОРЕКТНІ — поверни РІВНО один JSON-обʼєкт. Без markdown, без потрійних лапок, без жодного тексту до чи після:\n{\"intent\":\"booking_complete\",\"name\":\"контактна особа\",\"people_count\":2,\"guests\":\"Ігор, Оля\",\"workshop\":\"...\",\"date\":\"РРРР-ММ-ДД ГГ:ХХ\",\"date_human\":\"людський опис\",\"phone\":\"тількицифри\"}\n\nПоки даних не вистачає або клієнт просто спілкується/питає — відповідай ЗВИЧАЙНИМ ТЕКСТОМ (без JSON).\nЯкщо скарга, конфлікт чи питання, на яке ти не можеш відповісти з інфо вище — ввічливо скажи, що передаси адміністратору, і В КІНЦІ відповіді додай тег [[ESCALATE]] (клієнт його не побачить).`;\n\nreturn [{ json: { ...$input.item.json, cfg } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1248,
+        112
+      ],
+      "id": "ec2061e5-38da-452d-93e1-237e743446a4",
+      "name": "CONFIG"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "d265d8f6-3778-4379-8592-589a69cbc5b8",
+              "leftValue": "={{ $('Parse Response').item.json.needs_escalation }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        256,
+        384
+      ],
+      "id": "93ca8de7-92c6-4ae6-b984-b4cf8bda8b96",
+      "name": "IF: Needs Escalation"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('CONFIG').item.json.cfg.owner_chat_id }}",
+        "text": "={{ '⚠️ Клієнт потребує уваги!\\nChat ID: ' + $('Telegram Trigger').item.json.message.chat.id + '\\nПовідомлення: ' + $('Telegram Trigger').item.json.message.text }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        480,
+        368
+      ],
+      "id": "8786ffa5-c9cb-4ba9-b295-d0ef20e5953e",
+      "name": "Telegram: Escalate to Owner",
+      "webhookId": "f00786e0-ba02-4728-a863-bf4dda9c2f0c",
+      "credentials": {
+        "telegramApi": {
+          "id": "cKtPVX3YqcCo4wgn",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Парсимо відповідь Claude РІВНО ОДИН РАЗ\nconst raw = $('Claude: Extract Booking').item.json.content[0].text || '';\nconst needs_escalation = raw.includes('[[ESCALATE]]');\nlet reply_text = raw.replace('[[ESCALATE]]', '').trim();\n\nlet is_complete = false;\nlet b = {};\n\ntry {\n  const m = raw.match(/\\{[\\s\\S]*\\}/);\n  if (m) {\n    const p = JSON.parse(m[0]);\n    if (p && typeof p === 'object' && p.intent === 'booking_complete' && p.name && p.workshop && p.date && p.phone) {\n      is_complete = true;\n\n      // Телефон: приймаємо будь-який формат, лише чистимо зайве (лишаємо + і цифри)\n      const phone = String(p.phone).replace(/[^0-9+]/g, '');\n\n      // Безпечний людський опис дати (Luxon у власному try, не валить is_complete)\n      let human = String(p.date_human || p.date);\n      try {\n        const dt = DateTime.fromFormat(String(p.date).trim(), 'yyyy-MM-dd HH:mm', { zone: 'Europe/Warsaw' }).setLocale('uk');\n        if (dt.isValid) human = dt.toFormat(\"cccc, d MMMM 'о' HH:mm\");\n      } catch (e) {}\n\n      b = {\n        name: String(p.name),\n        people_count: p.people_count || 1,\n        guests: String(p.guests || p.name),\n        workshop: String(p.workshop),\n        date: String(p.date),\n        date_human: human,\n        phone: phone\n      };\n\n      // Коли запис завершено — у reply_text НЕ лишаємо сирий JSON\n      reply_text = '';\n    }\n  }\n} catch (e) {\n  is_complete = false;\n}\n\nreturn [{\n  json: {\n    is_complete,\n    status: is_complete ? 'complete' : 'incomplete',  // строковий прапор для IF\n    needs_escalation,\n    reply_text,\n    ...b\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -304,
+        112
+      ],
+      "id": "5f7e3601-3168-4c85-a18c-fdaf9888199f",
+      "name": "Parse Response"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "CONFIG",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude: Extract Booking": {
+      "main": [
+        [
+          {
+            "node": "Parse Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: Is Valid JSON": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets: Save Booking",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Booking Question",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets: Save Booking": {
+      "main": [
+        [
+          {
+            "node": "Telegram: Confirm to Client",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger: Every 15 Min": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets: Read Bookings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets: Read Bookings": {
+      "main": [
+        [
+          {
+            "node": "IF: 24h Reminder Due",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "IF: 2h Reminder Due",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: 24h Reminder Due": {
+      "main": [
+        [
+          {
+            "node": "Telegram: Send 24h Reminder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram: Send 24h Reminder": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets: Update 24h Flag",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: 2h Reminder Due": {
+      "main": [
+        [
+          {
+            "node": "Telegram: Send 2h Reminder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram: Send 2h Reminder": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets: Update 2h Flag",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Conversation History": {
+      "main": [
+        [
+          {
+            "node": "Prepare History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare History": {
+      "main": [
+        [
+          {
+            "node": "Claude: Extract Booking",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Booking Question": {
+      "main": [
+        [
+          {
+            "node": "Save Booking History",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "IF: Needs Escalation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Booking History": {
+      "main": [
+        [
+          {
+            "node": "Update Booking History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CONFIG": {
+      "main": [
+        [
+          {
+            "node": "Read Conversation History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: Needs Escalation": {
+      "main": [
+        [
+          {
+            "node": "Telegram: Escalate to Owner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Response": {
+      "main": [
+        [
+          {
+            "node": "IF: Is Valid JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "7ad9717f-45bd-4eb6-a2aa-a7b5fd3affa4",
+  "meta": {
+    "instanceId": "aeec34bb259ab85ac6f88b56653021eaf8e691a982d76b2f255b79a3fb3061fb"
+  },
+  "id": "512pYlQ8DpVPl6L5",
+  "tags": []
+}
