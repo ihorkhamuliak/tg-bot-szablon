@@ -16,10 +16,10 @@
         -1408,
         112
       ],
-      "webhookId": "zereno-telegram-wh-001",
+      "webhookId": "telegram-webhook-001",
       "credentials": {
         "telegramApi": {
-          "id": "cKtPVX3YqcCo4wgn",
+          "id": "YOUR_TELEGRAM_CRED_ID",
           "name": "Telegram account"
         }
       }
@@ -70,7 +70,7 @@
       ],
       "credentials": {
         "httpHeaderAuth": {
-          "id": "vOPqW57wNKIPnrde",
+          "id": "YOUR_CLAUDE_HEADER_AUTH_CRED_ID",
           "name": "Header Auth account"
         }
       }
@@ -127,7 +127,7 @@
       "webhookId": "f3d9aa11-f6ad-4a0f-a1ea-767cfcb0d53f",
       "credentials": {
         "telegramApi": {
-          "id": "cKtPVX3YqcCo4wgn",
+          "id": "YOUR_TELEGRAM_CRED_ID",
           "name": "Telegram account"
         }
       }
@@ -137,12 +137,12 @@
         "operation": "appendOrUpdate",
         "documentId": {
           "__rl": true,
-          "value": "16QGn2tD92xrhEPjSTfgdVWjF53oMXLZ9o0TdMuKDaX4",
+          "value": "YOUR_GOOGLE_SHEET_ID",
           "mode": "id"
         },
         "sheetName": {
           "__rl": true,
-          "value": "n8n_test",
+          "value": "bookings",
           "mode": "name"
         },
         "columns": {
@@ -281,7 +281,7 @@
       ],
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "sXfdj3vqHgDwpH3G",
+          "id": "YOUR_GOOGLE_SHEETS_CRED_ID",
           "name": "Google Sheets OAuth2 API"
         }
       }
@@ -305,7 +305,7 @@
       "webhookId": "91b68647-b071-4422-b2ac-50762966c72b",
       "credentials": {
         "telegramApi": {
-          "id": "cKtPVX3YqcCo4wgn",
+          "id": "YOUR_TELEGRAM_CRED_ID",
           "name": "Telegram account"
         }
       }
@@ -329,7 +329,7 @@
       "webhookId": "9319a115-370d-40aa-9d6a-555d23b5f8a9",
       "credentials": {
         "telegramApi": {
-          "id": "cKtPVX3YqcCo4wgn",
+          "id": "YOUR_TELEGRAM_CRED_ID",
           "name": "Telegram account"
         }
       }
@@ -358,12 +358,12 @@
       "parameters": {
         "documentId": {
           "__rl": true,
-          "value": "16QGn2tD92xrhEPjSTfgdVWjF53oMXLZ9o0TdMuKDaX4",
+          "value": "YOUR_GOOGLE_SHEET_ID",
           "mode": "id"
         },
         "sheetName": {
           "__rl": true,
-          "value": "n8n_test",
+          "value": "bookings",
           "mode": "name"
         },
         "options": {}
@@ -378,7 +378,7 @@
       ],
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "sXfdj3vqHgDwpH3G",
+          "id": "YOUR_GOOGLE_SHEETS_CRED_ID",
           "name": "Google Sheets OAuth2 API"
         }
       }
@@ -435,7 +435,7 @@
       "webhookId": "ed3099bd-af28-484e-9e20-8bcbddb5da08",
       "credentials": {
         "telegramApi": {
-          "id": "cKtPVX3YqcCo4wgn",
+          "id": "YOUR_TELEGRAM_CRED_ID",
           "name": "Telegram account"
         }
       }
@@ -445,12 +445,12 @@
         "operation": "update",
         "documentId": {
           "__rl": true,
-          "value": "16QGn2tD92xrhEPjSTfgdVWjF53oMXLZ9o0TdMuKDaX4",
+          "value": "YOUR_GOOGLE_SHEET_ID",
           "mode": "id"
         },
         "sheetName": {
           "__rl": true,
-          "value": "n8n_test",
+          "value": "bookings",
           "mode": "name"
         },
         "columns": {
@@ -570,7 +570,7 @@
       ],
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "sXfdj3vqHgDwpH3G",
+          "id": "YOUR_GOOGLE_SHEETS_CRED_ID",
           "name": "Google Sheets OAuth2 API"
         }
       }
@@ -627,7 +627,7 @@
       "webhookId": "62a9a9e5-34b6-450b-89e6-cbb8422900c5",
       "credentials": {
         "telegramApi": {
-          "id": "cKtPVX3YqcCo4wgn",
+          "id": "YOUR_TELEGRAM_CRED_ID",
           "name": "Telegram account"
         }
       }
@@ -637,12 +637,12 @@
         "operation": "update",
         "documentId": {
           "__rl": true,
-          "value": "16QGn2tD92xrhEPjSTfgdVWjF53oMXLZ9o0TdMuKDaX4",
+          "value": "YOUR_GOOGLE_SHEET_ID",
           "mode": "id"
         },
         "sheetName": {
           "__rl": true,
-          "value": "n8n_test",
+          "value": "bookings",
           "mode": "name"
         },
         "columns": {
@@ -762,7 +762,7 @@
       ],
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "sXfdj3vqHgDwpH3G",
+          "id": "YOUR_GOOGLE_SHEETS_CRED_ID",
           "name": "Google Sheets OAuth2 API"
         }
       }
@@ -771,7 +771,7 @@
       "parameters": {
         "documentId": {
           "__rl": true,
-          "value": "16QGn2tD92xrhEPjSTfgdVWjF53oMXLZ9o0TdMuKDaX4",
+          "value": "YOUR_GOOGLE_SHEET_ID",
           "mode": "id"
         },
         "sheetName": {
@@ -800,7 +800,7 @@
       "alwaysOutputData": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "sXfdj3vqHgDwpH3G",
+          "id": "YOUR_GOOGLE_SHEETS_CRED_ID",
           "name": "Google Sheets OAuth2 API"
         }
       }
@@ -836,7 +836,7 @@
         "operation": "appendOrUpdate",
         "documentId": {
           "__rl": true,
-          "value": "16QGn2tD92xrhEPjSTfgdVWjF53oMXLZ9o0TdMuKDaX4",
+          "value": "YOUR_GOOGLE_SHEET_ID",
           "mode": "id"
         },
         "sheetName": {
@@ -891,7 +891,7 @@
       "name": "Update Booking History",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "sXfdj3vqHgDwpH3G",
+          "id": "YOUR_GOOGLE_SHEETS_CRED_ID",
           "name": "Google Sheets OAuth2 API"
         }
       }
@@ -961,7 +961,7 @@
       "webhookId": "f00786e0-ba02-4728-a863-bf4dda9c2f0c",
       "credentials": {
         "telegramApi": {
-          "id": "cKtPVX3YqcCo4wgn",
+          "id": "YOUR_TELEGRAM_CRED_ID",
           "name": "Telegram account"
         }
       }
