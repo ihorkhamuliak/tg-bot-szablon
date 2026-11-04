@@ -9,7 +9,7 @@
 
 ## 2. Google Sheets — створи документ з двома аркушами
 **Аркуш `bookings`** (бронювання), заголовки в рядку 1:
-`id | Chat_ID | name | workshop | date | phone | reminder_24h | reminder_2h`
+`ID | Chat_ID | name | workshop | date | phone | reminder_24h | reminder_2h`
 
 **Аркуш `conversations`** (пам'ять), заголовки:
 `chat_id | history | updated_at`

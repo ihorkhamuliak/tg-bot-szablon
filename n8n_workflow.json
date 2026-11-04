@@ -461,7 +461,7 @@
             "ID": "={{ $('Google Sheets: Read Bookings').item.json.id }}"
           },
           "matchingColumns": [
-            "id"
+            "ID"
           ],
           "schema": [
             {
@@ -653,7 +653,7 @@
             "ID": "={{ $('Google Sheets: Read Bookings').item.json.id }}"
           },
           "matchingColumns": [
-            "id"
+            "ID"
           ],
           "schema": [
             {
