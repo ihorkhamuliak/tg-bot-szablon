@@ -13,7 +13,7 @@ A ready-made building block: a Telegram bot that **answers customers, books appo
 - ⏰ **Reminders** 24h and 2h before the visit — automatically.
 - 🔔 **Notifies the owner** about every new booking.
 - 🙋 **Escalation:** on a complaint or unusual request the bot replies politely and hands off to the owner.
-- 🛡️ **Validation:** checks the phone number, no duplicate bookings per customer.
+- 🛡️ **Clean data:** accepts a phone number in any format and normalizes it; one active booking per customer, a repeat booking updates it.
 
 ## Who it's for
 
